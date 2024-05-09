@@ -18,6 +18,8 @@ runs:
           steps:
           - run: pwd
             shell: bash
+          - run: ls -la ./.generated-dynamic-dependencies
+            shell: bash
           - name: Step 1
             id: step-1
             shell: bash
