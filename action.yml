@@ -16,6 +16,7 @@ runs:
         runs:
           using: composite
           steps:
+          - run: pwd
           - name: Step 1
             id: step-1
             shell: bash
