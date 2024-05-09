@@ -1,0 +1,26 @@
+name: Atmos with Dependencies
+description: A GitHub Action that dynamically runs affected stacks and their dependencies.
+author: Cloud Posse, LLC
+inputs:
+  levels:
+    description: The number of levels of dependencies to include
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Setup
+      shell: bash
+      run: |
+        mkdir -p ./.generated-dynamic-dependencies &&
+        cat <<'EOF' >./.generated-dynamic-dependencies/action.yml
+        runs:
+          using: composite
+          steps:
+          - name: Step 1
+            id: step-1
+            shell: bash
+            run: echo "Step 1"
+        EOF
+    - name: Run Dynamically Generated Workflow
+      id: run
+      uses: ./.generated-dynamic-dependencies
