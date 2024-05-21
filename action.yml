@@ -11,8 +11,7 @@ runs:
     - name: Setup
       shell: bash
       run: |
-        mkdir -p ./.generated-dynamic-dependencies &&
-        cat <<'EOF' >./.generated-dynamic-dependencies/action.yml
+        mkdir -p ./.generated-dynamic-dependencies && cat <<'EOF' >./.generated-dynamic-dependencies/action.yml
         runs:
           using: composite
           steps:
@@ -36,8 +35,4 @@ runs:
             id: step-4
             shell: bash
             run: echo "atmos terraform apply component2 --stack one"
-
         EOF
-    - name: Run Dynamically Generated Workflow
-      id: run
-      uses: ./.generated-dynamic-dependencies
