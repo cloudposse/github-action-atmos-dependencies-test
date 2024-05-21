@@ -8,16 +8,14 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Setup
+    - name: step1
       shell: bash
       run: |
-        mkdir -p ./.generated-dynamic-dependencies && cat <<'EOF' >./.generated-dynamic-dependencies/action.yml
+        mkdir -p ./.generated-dynamic-dependencies && cat <<'EOF' >./.generated-dynamic-dependencies/component1/step1/action.yml
         runs:
           using: composite
           steps:
           - run: pwd
-            shell: bash
-          - run: ls -la ./.generated-dynamic-dependencies
             shell: bash
           - name: Plan Component1
             id: step-1
@@ -27,12 +25,22 @@ runs:
             id: step-2
             shell: bash
             run: echo "atmos terraform apply component1 --stack one"
+        EOF
+    - name: step2
+      shell: bash
+      run: |
+        mkdir -p ./.generated-dynamic-dependencies && cat <<'EOF' >./.generated-dynamic-dependencies/component1/step2/action.yml
+        runs:
+          using: composite
+          steps:
+          - run: pwd
+            shell: bash
           - name: Plan Component2
-            id: step-3
+            id: step-1
             shell: bash
             run: echo "atmos terraform plan component2 --stack one"
           - name: Apply Component2
-            id: step-4
+            id: step-2
             shell: bash
             run: echo "atmos terraform apply component2 --stack one"
         EOF
