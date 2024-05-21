@@ -20,10 +20,23 @@ runs:
             shell: bash
           - run: ls -la ./.generated-dynamic-dependencies
             shell: bash
-          - name: Step 1
+          - name: Plan Component1
             id: step-1
             shell: bash
-            run: echo "Step 1"
+            run: echo "atmos terraform plan component1 --stack one"
+          - name: Apply Component2
+            id: step-2
+            shell: bash
+            run: echo "atmos terraform apply component1 --stack one"
+          - name: Plan Component2
+            id: step-3
+            shell: bash
+            run: echo "atmos terraform plan component2 --stack one"
+          - name: Apply Component2
+            id: step-4
+            shell: bash
+            run: echo "atmos terraform apply component2 --stack one"
+
         EOF
     - name: Run Dynamically Generated Workflow
       id: run
