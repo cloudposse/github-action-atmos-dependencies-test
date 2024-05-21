@@ -8,39 +8,37 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: step1
+    - name: generate
       shell: bash
       run: |
-        mkdir -p ./.generated-dynamic-dependencies && cat <<'EOF' >./.generated-dynamic-dependencies/component1/step1/action.yml
-        runs:
-          using: composite
-          steps:
-          - run: pwd
-            shell: bash
-          - name: Plan Component1
-            id: step-1
-            shell: bash
-            run: echo "atmos terraform plan component1 --stack one"
-          - name: Apply Component2
-            id: step-2
-            shell: bash
-            run: echo "atmos terraform apply component1 --stack one"
-        EOF
-    - name: step2
-      shell: bash
-      run: |
-        mkdir -p ./.generated-dynamic-dependencies && cat <<'EOF' >./.generated-dynamic-dependencies/component1/step2/action.yml
-        runs:
-          using: composite
-          steps:
-          - run: pwd
-            shell: bash
-          - name: Plan Component2
-            id: step-1
-            shell: bash
-            run: echo "atmos terraform plan component2 --stack one"
-          - name: Apply Component2
-            id: step-2
-            shell: bash
-            run: echo "atmos terraform apply component2 --stack one"
+        mkdir -p ./.generated-dynamic-dependencies && cat <<'EOF' >./.generated-dynamic-dependencies/action.yml
+          name: Plan Component1 and Dependencies
+          runs:
+            on: [workflow_call]
+          jobs:
+            component1:
+              steps:
+              - run: pwd
+                shell: bash
+              - name: Plan Component1
+                id: step-1
+                shell: bash
+                run: echo "atmos terraform plan component1 --stack one"
+              - name: Apply Component1
+                id: step-2
+                shell: bash
+                run: echo "atmos terraform apply component1 --stack one"
+            component2:
+              need: component1
+              steps:
+              - run: pwd
+                shell: bash
+              - name: Plan Component2
+                id: step-1
+                shell: bash
+                run: echo "atmos terraform plan component2 --stack one"
+              - name: Apply Component2
+                id: step-2
+                shell: bash
+                run: echo "atmos terraform apply component2 --stack one"
         EOF
